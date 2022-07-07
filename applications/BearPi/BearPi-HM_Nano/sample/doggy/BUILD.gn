@@ -16,7 +16,8 @@ static_library("doggy") {
     sources = [
         "doggy.c",
         "st7735s.c",
-        "st7735_adapter.c"
+        "st7735_adapter.c",
+        "box.cpp"
     ]
     # cflags = [ "-Wno-unused-variable" ]
     # cflags += [ "-Wno-unused-but-set-variable" ]
