@@ -7,8 +7,6 @@ on:
   # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
     branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -20,7 +18,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     # see https://gitee.com/openharmony/docs/tree/master/docker
-    container: swr.cn-south-1.myhuaweicloud.com/openharmony-docker/openharmony-docker	
+    container: swr.cn-south-1.myhuaweicloud.com/openharmony-docker/openharmony-docker:1.0.0
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
