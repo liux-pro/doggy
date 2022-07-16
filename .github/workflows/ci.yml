@@ -18,12 +18,10 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     # see https://gitee.com/openharmony/docs/tree/master/docker
-#     container: swr.cn-south-1.myhuaweicloud.com/openharmony-docker/openharmony-docker:1.0.0
-    container: registry.us-west-1.aliyuncs.com/liux-pro/openharmony-docker:1.0.0
+    container: swr.cn-south-1.myhuaweicloud.com/openharmony-docker/openharmony-docker:1.0.0
+#     container: registry.us-west-1.aliyuncs.com/liux-pro/openharmony-docker:1.0.0
     env:
       HOME: /root
-      PATH: /root/.local/bin:/home/tools/gn:/home/tools/node-v14.15.4-linux-x64/bin:/home/tools/ninja:/home/tools/gcc_riscv32/bin:/home/tools/hc-gen:/home/tools/llvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -31,4 +29,4 @@ jobs:
 
       # run hmp dist to build artifact
       - name: build artifact
-        run: set HOME=/root &&. ~/.bashrc && hpm dist
+        run:  bash -ic ". ~/.bashrc && hpm dist"
