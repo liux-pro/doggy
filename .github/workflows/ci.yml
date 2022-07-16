@@ -27,4 +27,4 @@ jobs:
 
       # run hmp dist to build artifact
       - name: build artifact
-        run: . ~/.bashrc && hpm dist
+        run: set HOME=/root &&. ~/.bashrc && hpm dist
