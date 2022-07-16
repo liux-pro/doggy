@@ -17,6 +17,8 @@ static_library("doggy") {
         "doggy.c",
         "st7735s.c",
         "st7735_adapter.c",
+        "mpu6050.c",
+        "mpu6050_adapter.c",
         "box.cpp"
     ]
     # cflags = [ "-Wno-unused-variable" ]

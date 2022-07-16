@@ -24,12 +24,11 @@
 #include "wifiiot_spi.h"
 #include "st7735_adapter.h"
 #include "wifiiot_i2s.h"
+#include "wifiiot_i2c.h"
+#include "wifiiot_i2c_ex.h"
+#include "mpu6050_adapter.h"
 #include "wifiiot_watchdog.h"
-#define TEST_REGISTER_CMD 2
-#define TEST_PWM_PORT 1200
-#define TEST_PWM_DUTY 1500
-#define TEST_I2S_SIZE 8
-#define TEST_I2S_TIMEOUT 1000
+
 int call_c(void);
 lcd_status_t demo(void)
 {
@@ -94,69 +93,40 @@ static void MainTask(void)
   // lcd_simple_init();
   // demo();
 
-  unsigned int ret;
-  unsigned char writeBuf[] = "I2sDemoTest";
-  unsigned char readBuf[TEST_I2S_SIZE] = "";
-
-  IoSetFunc(WIFI_IOT_IO_NAME_GPIO_8, WIFI_IOT_IO_FUNC_GPIO_8_I2S0_WS);
-  IoSetFunc(WIFI_IOT_IO_NAME_GPIO_5, WIFI_IOT_IO_FUNC_GPIO_5_I2S0_MCLK);
-  IoSetFunc(WIFI_IOT_IO_NAME_GPIO_6, WIFI_IOT_IO_FUNC_GPIO_6_I2S0_TX);
-
-  GpioSetDir(WIFI_IOT_IO_NAME_GPIO_11, WIFI_IOT_GPIO_DIR_IN);
-  IoSetFunc(WIFI_IOT_IO_NAME_GPIO_11, WIFI_IOT_IO_FUNC_GPIO_11_I2S0_RX);
-
-  IoSetFunc(WIFI_IOT_IO_NAME_GPIO_12, WIFI_IOT_IO_FUNC_GPIO_12_I2S0_BCLK);
-
-  WifiIotI2sAttribute i2s_cfg;
-  i2s_cfg.sampleRate = WIFI_IOT_I2S_SAMPLE_RATE_8K;
-  i2s_cfg.resolution = WIFI_IOT_I2S_RESOLUTION_24BIT;
-
-  ret = I2sDeinit();
-  printf("i2sssss%d", ret);
-  ret = I2sInit(&i2s_cfg);
-  printf("i2sssss%d", ret);
-
-  ret = I2sWrite(writeBuf, sizeof(writeBuf), TEST_I2S_TIMEOUT);
-  printf("i2sssss%d", ret);
-
-  ret = I2sRead(readBuf, sizeof(readBuf), TEST_I2S_TIMEOUT);
-  printf("i2sssss%d", ret);
-
-  printf("%d", call_c());
   // int a = 0;
+
+  // while (1)
+  // {
+  // ret = I2sRead(readBuf, sizeof(readBuf), TEST_I2S_TIMEOUT);
+  // // printf("%2x%2x%2x%2x\n", readBuf[7], readBuf[6], readBuf[5], readBuf[4]);
+  // int x = (readBuf[7] << 24 | readBuf[6] << 16 | readBuf[5] << 8) >> 8;
+  // printf("%d,500000,-500000\n", x);
+  // WatchDogKick();
+  // usleep(0);
+
+  // }
+
+  I2C_Simple_Init();
+  MPU6050_Init();
+  uint16_t buf[7];
 
   while (1)
   {
-    // if (a > 100)
-    // {
-    //   continue;
-    //   /* code */
-    // }
-    // else
-    // {
-    //   a++;
-    // }
-
-    ret = I2sRead(readBuf, sizeof(readBuf), TEST_I2S_TIMEOUT);
-    // printf("%2x%2x%2x%2x\n", readBuf[7], readBuf[6], readBuf[5], readBuf[4]);
-    int x = (readBuf[7] << 24 | readBuf[6] << 16 | readBuf[5] << 8) >> 8;
-    printf("%d,500000,-500000\n", x);
-    WatchDogKick();
-
-    // printf("ok\n");
-
-    // //设置GPIO_2输出高电平点亮LED灯
-    // GpioSetOutputVal(WIFI_IOT_GPIO_IDX_2, 1);
-
-    // //延时1s
-    // usleep(1000000);
-
-    // //设置GPIO_2输出低电平熄灭LED灯
-    // GpioSetOutputVal(WIFI_IOT_GPIO_IDX_2, 0);
-
-    // //延时1s
-    // usleep(1000000);
-    usleep(0);
+    for (int i = 0; i < 100; i++)
+    {
+      // if (i == 0)
+      // {
+      //   MPU6050_EnableLowPowerMode(MPU6050_Wakeup_Freq_1p25Hz);
+      // }
+      // else if (i == 50)
+      // {
+      //   MPU6050_DisableLowPowerMode();
+      // }
+      MPU6050_ReadAll(buf);
+      printf("ax:%6d, ay:%6d, az:%6d, tp:%6d, gx:%6d, gy:%6d, gz:%6d\r\n",
+             (int16_t)buf[0], (int16_t)buf[1], (int16_t)buf[2], (int16_t)buf[3] / 34 + 365, (int16_t)buf[4], (int16_t)buf[5], (int16_t)buf[6]);
+      usleep(100 * 1000);
+    }
   }
 }
 
