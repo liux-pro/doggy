@@ -22,6 +22,7 @@ jobs:
     container: registry.us-west-1.aliyuncs.com/liux-pro/openharmony-docker:1.0.0
     env:
       HOME: /root
+      PATH: /root/.local/bin:/home/tools/gn:/home/tools/node-v14.15.4-linux-x64/bin:/home/tools/ninja:/home/tools/gcc_riscv32/bin:/home/tools/hc-gen:/home/tools/llvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
