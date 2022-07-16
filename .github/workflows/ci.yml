@@ -30,3 +30,9 @@ jobs:
       # run hmp dist to build artifact
       - name: build artifact
         run:  bash -ic ". ~/.bashrc && hpm dist"
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2.2.1
+        with:
+          # Artifact name
+          name: Hi3861_wifiiot_app_allinone.bin
+          path: ./out/BearPi-HM_Nano/Hi3861_wifiiot_app_allinone.bin
